@@ -1,0 +1,87 @@
+# OS and editor metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python caches, local environments, and test output
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.pyre/
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+
+# MATLAB generated files and build directories
+*.asv
+*.m~
+slprj/
+codegen/
+*.mex*
+
+# Project build and packaged runtime output
+/build/
+/release/
+/dist/
+*.exe
+*.dll
+*.pyd
+*.so
+*.dylib
+*.pkg
+
+# Temporary and derived work directories
+**/tmp/
+**/work/
+*.tmp
+*.temp
+
+# LaTeX auxiliary output; keep source, bibliography, figures, and PDFs
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+
+# Derived text and binary experiment artifacts
+*_pdf_text.txt
+pdf_text.txt
+*.bin
+*.mat
+*.npz
+*.h5
+*.hdf5
+
+# Archives; publish large application packages as release assets instead
+*.zip
+*.7z
+*.rar
+
+# Local agent/tooling metadata
+.agents/

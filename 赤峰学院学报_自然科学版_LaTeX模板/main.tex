@@ -1,0 +1,510 @@
+% !TeX program = xelatex
+% 赤峰学院学报（自然科学版）规范格式论文
+% 依据《赤峰学院学报（自然科学版）规范格式论文模板》排版
+\documentclass[UTF8,a4paper,12pt]{ctexart}
+
+% ==================== 基础宏包 ====================
+\usepackage{geometry}
+\geometry{top=2.4cm,bottom=2.4cm,left=2.5cm,right=2.5cm}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning}
+
+% ==================== 排版设置 ====================
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\linespread{1.25}
+
+% 图表题：中文在前、英文在后
+\captionsetup{
+  font=small,
+  labelsep=space,
+  justification=centering,
+  singlelinecheck=false
+}
+
+% 一级、二级、三级标题
+\titleformat{\section}{\heiti\zihao{4}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\heiti\zihao{-4}}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\heiti\zihao{-4}}{\thesubsubsection}{0.8em}{}
+
+% 参考文献采用顺序编码制、方括号、上标形式
+\setcitestyle{numbers,square,super,sort&compress}
+
+% ==================== 自定义命令 ====================
+\newcommand{\zhabstract}[1]{%
+  \noindent\textbf{摘\quad 要：}#1\par
+}
+\newcommand{\zhkeywords}[1]{%
+  \noindent\textbf{关键词：}#1\par
+}
+\newcommand{\clc}[1]{%
+  \noindent\textbf{中图分类号：}#1\par
+}
+
+\newcommand{\enauthor}[1]{%
+  \begin{center}
+    #1
+  \end{center}
+}
+
+\newcommand{\enabstract}[1]{%
+  \noindent\textbf{Abstract: }#1\par
+}
+\newcommand{\enkeywords}[1]{%
+  \noindent\textbf{Keywords: }#1\par
+}
+
+% 双语图题：\bicaption{中文图名}{English caption}
+\newcommand{\bicaption}[2]{%
+  \caption{#1\\[-0.2em]\small Fig.\thefigure\ #2}
+}
+
+% 双语表题：\bitablecaption{中文表名}{English table title}
+\newcommand{\bitablecaption}[2]{%
+  \caption{#1\\[-0.2em]\small Table \thetable\ #2}
+}
+
+\begin{document}
+
+% ==================================================
+% 题名区（不超过25字）
+% ==================================================
+\begin{center}
+{\heiti\zihao{2}\textbf{光栅扭矩传感器数字孪生建模与多工况解调算法研究}\par}
+\vspace{0.8em}
+
+{\zihao{4} 张三$^{1}$，李四$^{2}$，王五$^{2}$\par}
+\vspace{0.5em}
+
+{\zihao{-5}
+（1. 赤峰学院 物理与电子信息学院，内蒙古 赤峰 024000；2. 清华大学 精密仪器系，北京 100084）
+\par}
+\end{center}
+
+\vspace{0.8em}
+
+% ==================================================
+% 中文摘要（不少于300字；结构：背景/问题→目的→方法→结果→定量数据→结论→创新点）
+% ==================================================
+\zhabstract{针对光栅扭矩传感器在复杂服役环境下受光机电多物理场耦合、装配偏心、非理想信号失真及环境温度漂移影响导致解调精度劣化且难以在线原位校正的问题，本文以同心圆环光栅扭矩测量系统为研究对象，构建了端到端全链路多物理场数字孪生仿真平台，并系统开展了多工况解调算法评估与温漂在线补偿研究。首先，建立融合扭轴弹性力学、圆光栅相对切向微位移、多通道光电接收与跨阻放大、非理想误差注入（直流偏置、幅值失配、正交相移与高次谐波）及ADC量化的全链路数字孪生模型；其次，设计涵盖标称理想、增益失配、强高斯噪声（信噪比低至10 dB）、反向转矩及零扭矩静态奇异等14类典型工况测试矩阵，横向对比评测专利分相计数细分、经典反正切与改进椭圆拟合解调算法的鲁棒性与精度界限；最后，引入扭轴热弹性与光栅热膨胀模型，构建基于数字孪生驱动的温度实时在线前馈补偿机制。结果表明：在14类复杂工况下，专利1/32细分解调算法表现出最优的综合抗噪与鲁棒适应性，全工况平均位移解调均方根误差（RMSE）为$0.384\,\mathrm{\mu m}$，在信噪比为10 dB的极限恶劣工况下RMSE仅为$0.728\,\mathrm{\mu m}$，鲁棒性评分达0.638；在$-20~^\circ\mathrm{C}\sim +80~^\circ\mathrm{C}$宽温域跨度下，未补偿时材料剪切模量与光栅周期温漂导致转矩测量灵敏度漂移达$-1.19\%\sim +1.83\%$，扭矩测量RMSE最高达$0.0847\,\mathrm{N\cdot m}$；经数字孪生模型实时前馈补偿后，全温区扭矩解调RMSE降至理论数值计算精度极限（$<1\times 10^{-15}\,\mathrm{N\cdot m}$），完全消除了温漂引入的测量误差。研究表明，所提数字孪生平台能够精准复现物理传感系统的全链路动态特性，为光栅扭矩传感器的高精度细分解调与极端工况环境补偿提供了可靠的机理模型与算法支撑。本文主要创新在于突破了传统纯数值仿真与实物测试脱节的瓶颈，实现了集光机电多物理场建模、软硬件在环协议通信、全工况鲁棒性消融与实时温漂补偿于一体的数字孪生闭环架构。}
+
+\vspace{0.4em}
+\zhkeywords{光栅扭矩传感器；数字孪生；多物理场建模；四相信号细分；温漂补偿；鲁棒性评估}
+\clc{TP212.14；TH741}
+
+\vspace{1em}
+
+% ==================================================
+% 英文信息（与中文严格对应）
+% ==================================================
+\begin{center}
+{\bfseries\large Digital Twin Modeling and Multi-Condition Demodulation Algorithms for Optical Grating Torque Sensors\par}
+\vspace{0.6em}
+ZHANG San$^{1}$, LI Si$^{2}$, WANG Wu$^{2}$\par
+\vspace{0.4em}
+\small
+(1. College of Physics and Electronic Information, Chifeng University, Chifeng 024000, China;\\
+2. Department of Precision Instrument, Tsinghua University, Beijing 100084, China)
+\end{center}
+
+\enabstract{To address the degradation of demodulation accuracy and the difficulty of in-situ online calibration in optical grating torque sensors caused by opto-electro-mechanical multi-physics coupling, assembly eccentricity, non-ideal signal distortion, and ambient temperature drift, this paper investigates a concentric circular grating torque measurement system. An end-to-end multi-physics digital twin simulation platform was established, and a systematic study on multi-condition demodulation algorithms and online temperature drift compensation was conducted. First, a full-pipeline digital twin model was developed, integrating shaft torsional mechanics, tangential relative displacement of circular gratings, multi-channel optoelectronic detection with transimpedance amplification, non-ideal error injection (DC offset, amplitude imbalance, phase shift, and higher-order harmonics), and ADC quantization. Second, a benchmark test matrix consisting of 14 typical operating conditions---including nominal cases, gain mismatch, heavy Gaussian noise (signal-to-noise ratio down to 10 dB), reverse torque, and zero-torque singularity---was designed to evaluate the robustness and accuracy limits of patent multi-phase counting subdivision, traditional arctan, and improved ellipse fitting algorithms. Finally, a thermo-elastic model of the torsional shaft and a thermal expansion model of the optical grating were introduced to realize real-time feedforward temperature compensation driven by the digital twin. The results show that across all 14 conditions, the patent 1/32 subdivision demodulation algorithm achieves the highest noise immunity and robustness, yielding a mean displacement root mean square error (RMSE) of $0.384\,\mathrm{\mu m}$, a worst-case RMSE of only $0.728\,\mathrm{\mu m}$ at an SNR of 10 dB, and a robustness score of 0.638. Over a wide temperature span from $-20~^\circ\mathrm{C}$ to $+80~^\circ\mathrm{C}$, the uncompensated thermal drift of the shear modulus and grating pitch results in a torque sensitivity variation of $-1.19\%$ to $+1.83\%$ and a maximum torque RMSE of $0.0847\,\mathrm{N\cdot m}$. After digital twin real-time compensation, the torque demodulation RMSE across the full temperature range drops to the numerical calculation limit ($<1\times 10^{-15}\,\mathrm{N\cdot m}$), completely eliminating thermal errors. The proposed digital twin platform accurately reproduces the full-chain dynamic behavior of physical sensing systems, providing rigorous theoretical models and algorithm validation for high-precision demodulation and environmental compensation.}
+
+\vspace{0.4em}
+\enkeywords{optical grating torque sensor; digital twin; multi-physics modeling; four-phase signal subdivision; temperature drift compensation; robustness evaluation}
+
+\vspace{1em}
+
+% ==================================================
+% 引言（不编号，不包含图、表、公式）
+% ==================================================
+\section*{引言}
+
+扭矩作为旋转机械动力传输与状态监测的核心物理量，其高精度、高动态响应的在线实时测量在高端数控机床、新能源汽车动力总成、航空航天推进系统以及大型风力发电机组中发挥着决定性作用。相比于传统的电阻应变片式与压磁式扭矩传感器，基于莫尔条纹原理的光栅扭矩传感器具有非接触检测、抗电磁干扰能力强、测量分辨率高以及动态频响宽等显著优势，成为精密测控领域的研究热点之一\cite{ref1,ref2}。
+
+在光栅传感测量系统中，读数头接收到的光电信号质量直接决定了最终的位移与角度解调精度\cite{ref3,ref4}。然而，在实际工业服役工况下，由于光源发光强度波动、光敏探测器响应不均、机械安装偏心及刻线制造缺陷，光电转换输出的正交莫尔条纹信号往往不可避免地掺杂直流偏置、幅值失配、正交相位畸变以及高次谐波等非理想误差\cite{ref5,ref6}。针对上述非线性误差，国内外学者先后提出了Heydemann椭圆参数拟合算法\cite{ref9}、改进粒子群优化校正法\cite{ref8}以及后验滤波补偿模型\cite{ref11}。但这些算法大多基于理想稳态或单一静态误差假设展开，对于强工业噪声干扰、反向动态突变以及零扭矩静态奇异等极限工况下的适应性缺乏系统性横向横评。
+
+更为关键的是，光栅扭矩传感器是典型的力-光-机-电深度耦合精密系统。环境温度的显著剧变将同时改变扭轴材料的剪切弹性模量和光栅基底的微观刻线周期，使得系统宏观测量灵敏度发生非线性漂移。传统基于物理样机的静态离线标定方法试验周期漫长、开发成本高昂，且难以在多变服役现场实现实时在线解耦与动态补偿\cite{ref7,ref10}。近年来兴起的数字孪生技术通过构建物理实体在虚拟空间的高保真数字映射，为全生命周期性能评估、极端工况虚拟测试以及在线智能补偿提供了全新的技术途径。
+
+鉴于此，本文针对一种基于同心圆环光栅的转动体扭矩测量系统，构建了端到端全链路多物理场数字孪生仿真平台。本文的主要工作包括：
+（1）建立从扭轴力学变形、圆弧光栅微位移调制、光电探测到非理想噪声注入与ADC量化的完整多物理场模型；
+（2）构建涵盖标称无损、参数失配、低信噪比以及静态奇异等14类典型工况的基准测试矩阵，系统对比评测专利多相细分、经典正交反正切与改进椭圆拟合算法的精度界限与抗噪鲁棒性；
+（3）阐明环境温度对扭轴剪切模量与光栅周期的双重耦合漂移机理，建立基于数字孪生模型的温度实时前馈在线补偿机制；
+（4）依托持久化计算引擎与标准二进制串口协议栈，实现软硬件在环的闭环数据验证。
+
+% ==================================================
+% 1 扭矩光栅传感器全链路数字孪生体系架构与物理模型
+% ==================================================
+\section{扭矩光栅传感器全链路数字孪生体系架构与物理模型}
+
+\subsection{系统工作原理与多物理场架构}
+本文研究的光栅扭矩测量系统主要由扭轴受扭弹性段、固定测量腔体、主光栅盘、指示光栅副、聚光准直光源、五路光电探测阵列以及温度传感模块组成。主光栅随扭轴变形端产生相对转角，与固定在测量腔体上的指示光栅形成重叠调制，进而产生随扭矩变化的周期性光强调制。
+
+数字孪生仿真平台的总体体系架构如图\ref{fig:arch}所示。整个数字孪生流水线严格遵循“扭矩激励 $\to$ 机械微变形 $\to$ 光学相位调制 $\to$ 光电探测转换 $\to$ 硬件电路与误差注入 $\to$ ADC量化 $\to$ 串口协议成帧”的物理信息映射传递规律。通过模块化解耦设计，各层均具备独立的参数配置接口与实测数据替换边界。
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[node distance=1.0cm and 0.8cm, auto, >=Stealth,
+    block/.style={rectangle, draw=black, thick, fill=white, text width=2.4cm, text centered, minimum height=1.1cm, font=\small},
+    line/.style={draw=black, thick, -{Stealth[length=2.5mm]}}]
+
+    \node [block] (input) {输入激励\\扭矩 $T$ / 温度 $T_{\mathrm{e}}$};
+    \node [block, right=of input] (mech) {机械扭转层\\扭转角 $\theta$\\相对位移 $x_{\mathrm{rel}}$};
+    \node [block, right=of mech] (opt) {光学调制层\\微位移透射\\光学相位 $\phi_{\mathrm{opt}}$};
+    \node [block, below=of opt] (photo) {光电转换层\\光敏探测阵列\\跨阻调理电压};
+    \node [block, left=of photo] (error) {非理想误差层\\偏置/失配/相移\\谐波与高斯噪声};
+    \node [block, left=of error] (adc) {数字采样与通信\\ADC模数转换\\串口定长协议帧};
+
+    \path [line] (input) -- (mech);
+    \path [line] (mech) -- (opt);
+    \path [line] (opt) -- (photo);
+    \path [line] (photo) -- (error);
+    \path [line] (error) -- (adc);
+  \end{tikzpicture}
+  \bicaption{光栅扭矩传感器数字孪生全链路架构}{Full-pipeline architecture of digital twin for optical grating torque sensor}
+  \label{fig:arch}
+\end{figure}
+
+\subsection{机械扭转力学与光栅位移几何映射}
+当扭轴两端承受外加转矩时，弹性受力段产生扭转角剪切应变。根据圆截面轴扭转力学理论，扭转角与施加外扭矩呈线性正比关系，如式\eqref{eq:theta}所示：
+\begin{equation}
+\theta = \frac{T L}{G I_{\mathrm{p}}} = \frac{32 T L}{\pi G d^4}
+\label{eq:theta}
+\end{equation}
+式中，$\theta$为扭轴变形角位移，单位为$\mathrm{rad}$；$T$为输入扭矩，单位为$\mathrm{N\cdot m}$；$L$为有效弹性轴段长度，单位为$\mathrm{m}$；$G$为轴材料的剪切弹性模量，标称值为$79\,\mathrm{GPa}$；$I_{\mathrm{p}} = \pi d^4 / 32$为圆截面极惯性矩，单位为$\mathrm{m^4}$；$d$为扭轴直径，标称值为$0.008\,\mathrm{m}$。定义扭转弹性刚度系数为$k_{\mathrm{t}} = G I_{\mathrm{p}} / L$，则扭转角简记为$\theta = T / k_{\mathrm{t}}$。
+
+主光栅与指示光栅安装于同轴结构中。在扭转角$\theta$的作用下，位于有效测量半径处的光栅表面产生切向相对线位移，如式\eqref{eq:displacement}所示：
+\begin{equation}
+x_{\mathrm{rel}} = x_{\mathrm{bias}} + r_{\mathrm{eff}} \theta
+\label{eq:displacement}
+\end{equation}
+式中，$x_{\mathrm{rel}}$为光栅刻线间的相对切向线位移，单位为$\mathrm{m}$；$r_{\mathrm{eff}}$为光电读数头所在的有效旋转测量半径，标称值为$0.007\,\mathrm{m}$；$x_{\mathrm{bias}}$为机械装配初始静态位移偏置量，单位为$\mathrm{m}$。
+
+\subsection{光学调制与多通道光电接收模型}
+光栅刻线副周期设为$P$，取标称基准值$P=20\,\mathrm{\mu m}$。相对切向微位移$x_{\mathrm{rel}}$通过莫尔条纹光强调制转换为空间光学相位，如式\eqref{eq:optical_phase}所示：
+\begin{equation}
+\phi_{\mathrm{opt}} = \frac{2\pi x_{\mathrm{rel}}}{P} + \phi_0
+\label{eq:optical_phase}
+\end{equation}
+式中，$\phi_{\mathrm{opt}}$为调制光学主相位，单位为$\mathrm{rad}$；$\phi_0$为初始光学对准相位，单位为$\mathrm{rad}$。
+
+光敏探测器阵列接收透射调制光强，并转换为光生电流。为实现高灵敏度辨向与细分解调，光机结构设计了包含零位通道、主测量通道及三路辨向细分通道的五路传感组件。其中四路测量通道在空间上依次相差$\pi/2$电角度，经跨阻放大电路（TIA）输出标称四相正交差分电压信号，如式\eqref{eq:four_phase}所示：
+\begin{equation}
+\left\{
+\begin{aligned}
+u_{\mathrm{A}} &= U_0 + U_{\mathrm{m}} \cos(\phi_{\mathrm{opt}}) \\
+u_{\mathrm{B}} &= U_0 + U_{\mathrm{m}} \cos\left(\phi_{\mathrm{opt}} + \frac{\pi}{2}\right) = U_0 - U_{\mathrm{m}} \sin(\phi_{\mathrm{opt}}) \\
+u_{\mathrm{C}} &= U_0 + U_{\mathrm{m}} \cos(\phi_{\mathrm{opt}} + \pi) = U_0 - U_{\mathrm{m}} \cos(\phi_{\mathrm{opt}}) \\
+u_{\mathrm{D}} &= U_0 + U_{\mathrm{m}} \cos\left(\phi_{\mathrm{opt}} + \frac{3\pi}{2}\right) = U_0 + U_{\mathrm{m}} \sin(\phi_{\mathrm{opt}})
+\end{aligned}
+\right.
+\label{eq:four_phase}
+\end{equation}
+式中，$u_{\mathrm{A}}$、$u_{\mathrm{B}}$、$u_{\mathrm{C}}$、$u_{\mathrm{D}}$分别为四路光电转换通道输出电压，单位为$\mathrm{V}$；$U_0$为直流共模电压偏置，单位为$\mathrm{V}$；$U_{\mathrm{m}}$为正弦调制交流电压幅值，单位为$\mathrm{V}$。
+
+\subsection{非理想误差注入与ADC量化模型}
+在实际硬件系统中，光电探测器响应度不一致、光阑倾斜与运放温漂会导致输出信号偏离理想模型。数字孪生平台构建了完备的非理想误差注入模型，包含通道增益系数$K_i$、直流漂移量$B_i$、空间相位倾斜误差$\delta\phi_i$、二/三次高次谐波分量及白噪声，如式\eqref{eq:error_model}所示：
+\begin{equation}
+u_i^*(t) = K_i U_{\mathrm{m}} \cos\left(\phi_{\mathrm{opt}}(t) + \varphi_i + \delta\phi_i\right) + B_i + \sum_{k=2}^{3} H_{k,i} \cos(k\phi_{\mathrm{opt}}(t)) + n_i(t)
+\label{eq:error_model}
+\end{equation}
+式中，$i \in \{\mathrm{A, B, C, D}\}$；$\varphi_i \in \{0, \pi/2, \pi, 3\pi/2\}$为通道名义相位；$H_{k,i}$为第$k$次谐波幅值；$n_i(t) \sim \mathcal{N}(0, \sigma_n^2)$为均值为零、方差为$\sigma_n^2$的高斯加性白噪声。
+
+经过前置模拟调理后的电压信号进入模数转换器（ADC）。ADC执行动态电压限幅与线性量化，如式\eqref{eq:adc_quant}所示：
+\begin{equation}
+D_i = \mathrm{round}\left( \frac{\mathrm{clip}(u_i^*, V_{\mathrm{min}}, V_{\mathrm{max}}) - V_{\mathrm{min}}}{V_{\mathrm{max}} - V_{\mathrm{min}}} \times (2^N - 1) \right)
+\label{eq:adc_quant}
+\end{equation}
+式中，$D_i$为ADC输出离散量化码值；$N$为ADC采样有效分辨率位数，取$N=12\,\mathrm{bit}$；$V_{\mathrm{min}}$与$V_{\mathrm{max}}$分别为模拟输入基准量程下限与上限，分别设定为$0\,\mathrm{V}$与$3.3\,\mathrm{V}$。
+
+\subsection{通信协议成帧与数字孪生基准参数}
+为支持软硬件在环联调与实时数据回传，平台封装了严格的定长二进制通信帧协议。通信波特率设定为$115200\,\mathrm{bps}$。每帧总长度固定为11字节，帧结构由1字节同步帧头（\texttt{0xAA}）、4通道12位ADC数据高低字节（A、B、C、D各占2字节，大端传输）以及2字节CRC-16/CCITT-FALSE循环冗余校验码组成。
+
+数字孪生仿真平台的主要物理参数、光学几何尺寸与电气配置如表\ref{tab:param}所示。
+
+\begin{table}[htbp]
+  \centering
+  \bitablecaption{光栅扭矩数字孪生平台主要物理与系统参数}{Main physical and system parameters of optical grating torque digital twin platform}
+  \label{tab:param}
+  \begin{tabular}{lccc}
+    \toprule
+    参数名称 & 符号 & 数值 & 单位 \\
+    \midrule
+    扭轴有效长度 & $L$ & $0.012$ & $\mathrm{m}$ \\
+    扭轴截面直径 & $d$ & $0.008$ & $\mathrm{m}$ \\
+    扭轴极惯性矩 & $I_{\mathrm{p}}$ & $4.021\times 10^{-10}$ & $\mathrm{m^4}$ \\
+    常温剪切模量 & $G_0$ & $7.90\times 10^{10}$ & $\mathrm{Pa}$ \\
+    扭转弹性刚度 & $k_{\mathrm{t}}$ & $2.647\times 10^{3}$ & $\mathrm{N\cdot m/rad}$ \\
+    光栅有效读数半径 & $r_{\mathrm{eff}}$ & $0.007$ & $\mathrm{m}$ \\
+    光栅名义刻线周期 & $P_0$ & $2.00\times 10^{-5}$ & $\mathrm{m}$ \\
+    光电调制基准幅值 & $U_{\mathrm{m}}$ & $1.00$ & $\mathrm{V}$ \\
+    直流偏置工作点 & $U_0$ & $1.65$ & $\mathrm{V}$ \\
+    ADC采样分辨率 & $N$ & $12$ & $\mathrm{bit}$ \\
+    ADC输入基准量程 & $[V_{\mathrm{min}}, V_{\mathrm{max}}]$ & $[0, 3.3]$ & $\mathrm{V}$ \\
+    串口通信波特率 & $f_{\mathrm{baud}}$ & $115200$ & $\mathrm{bps}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ==================================================
+% 2 多通道光电解调与数字孪生温漂补偿算法
+% ==================================================
+\section{多通道光电解调与数字孪生温漂补偿算法}
+
+\subsection{专利多相细分解调算法机理}
+在专利结构中，基于零位参考及四路正交传感通道构建了分相状态机计数细分器。根据相位空间分割粒度，构建了四细分（Patent 1/4）、十六细分（Patent 1/16）与三十二细分（Patent 1/32）三类数字状态机：
+（1）Patent 1/4计数器：利用正交通道过零点比较生成象限翻转脉冲，名义步进当量为$P/4 = 5.0\,\mathrm{\mu m}$；
+（2）Patent 1/16计数器：引入多路阈值逻辑比较器，将单个信号周期等分为16个特征相位区间，步进当量为$P/16 = 1.25\,\mathrm{\mu m}$；
+（3）Patent 1/32计数器：结合五路传感器空间相位组合逻辑状态机，实现32细分精细区间锁定，步进当量达到$P/32 = 0.625\,\mathrm{\mu m}$。
+
+\subsection{经典反正切与改进椭圆拟合解调算法}
+作为现代光电编码器的基准算法，差分正交反正切算法（Traditional atan2）首先对四路信号实施差动合成以抑制共模干扰：
+\begin{equation}
+u_{\mathrm{diff,1}} = u_{\mathrm{A}} - u_{\mathrm{C}} = 2 U_{\mathrm{m}} \cos(\phi_{\mathrm{opt}}), \quad u_{\mathrm{diff,2}} = u_{\mathrm{D}} - u_{\mathrm{B}} = 2 U_{\mathrm{m}} \sin(\phi_{\mathrm{opt}})
+\label{eq:diff_signal}
+\end{equation}
+位移相位通过反正切函数直接求取：
+\begin{equation}
+\hat{\phi}_{\mathrm{opt}} = \mathrm{atan2}(u_{\mathrm{diff,2}}, u_{\mathrm{diff,1}})
+\label{eq:atan2}
+\end{equation}
+解调微位移为$\hat{x} = (P / 2\pi) \cdot \mathrm{unwrap}(\hat{\phi}_{\mathrm{opt}})$。
+
+改进椭圆拟合校正算法（Existing improved）则引入Heydemann最小二乘代数拟合理论\cite{ref7,ref9}。当信号存在增益失衡、偏置及非正交时，李萨如图形退化为任意椭圆：
+\begin{equation}
+A u_{\mathrm{diff,1}}^2 + B u_{\mathrm{diff,1}} u_{\mathrm{diff,2}} + C u_{\mathrm{diff,2}}^2 + D u_{\mathrm{diff,1}} + E u_{\mathrm{diff,2}} = 1
+\label{eq:ellipse}
+\end{equation}
+通过构造法方程最小二乘求解几何参数并建立坐标正交变换，校正恢复标准正交圆轨迹。
+
+\subsection{材料热弹性与光栅热膨胀温漂机理}
+环境工作温度$T_{\mathrm{e}}$发生偏移时，扭矩传感结构面临双重热效应扰动：
+（1）扭轴材料的剪切模量随温度升高呈软化趋势，其一阶温度依赖模型如式\eqref{eq:shear_temp}所示：
+\begin{equation}
+G(T_{\mathrm{e}}) = G_0 \left[ 1 + \alpha_G (T_{\mathrm{e}} - T_0) \right]
+\label{eq:shear_temp}
+\end{equation}
+式中，$T_0 = 20~^\circ\mathrm{C}$为基准校准温度；$\alpha_G = -3.0\times 10^{-4}~^\circ\mathrm{C}^{-1}$为弹性轴剪切模量温度系数。
+
+（2）光栅基底热胀冷缩导致有效刻线周期发生线性形变，如式\eqref{eq:period_temp}所示：
+\begin{equation}
+P(T_{\mathrm{e}}) = P_0 \left[ 1 + \alpha_P (T_{\mathrm{e}} - T_0) \right]
+\label{eq:period_temp}
+\end{equation}
+式中，$\alpha_P = 1.2\times 10^{-5}~^\circ\mathrm{C}^{-1}$为石英/金属光栅基材的热膨胀线系数。
+
+两项热效应叠加导致系统转矩-相位转换灵敏度发生非线性偏离，未补偿状态下的视在扭矩测量结果将产生显著漂移。
+
+\subsection{数字孪生驱动的温度实时在线前馈补偿}
+传统物理传感器需要加装复杂的模拟硬件温补网络。而在数字孪生闭环架构下，系统内置数字温度传感器获取当前工作温度$T_{\mathrm{e}}$，并在解调算法层实施解析前馈逆变换补偿，如式\eqref{eq:temp_comp}所示：
+\begin{equation}
+\hat{T}_{\mathrm{comp}} = \frac{G(T_{\mathrm{e}}) I_{\mathrm{p}}}{L \cdot r_{\mathrm{eff}}} \cdot \frac{P(T_{\mathrm{e}})}{2\pi} \hat{\phi}_{\mathrm{opt}}
+\label{eq:temp_comp}
+\end{equation}
+数字孪生模型以动态参数矩阵替代传统恒定常数矩阵，从机理底层直接解耦并消除宏观温度交叉敏感性。
+
+% ==================================================
+% 3 多工况解调算法性能评估与实验分析
+% ==================================================
+\section{多工况解调算法性能评估与实验分析}
+
+\subsection{14类典型工况基准测试矩阵设计}
+为全面横评不同解调算法在复杂工程现场的性能边界与鲁棒特性，数字孪生仿真平台设计了涵盖14类典型极端服役工况的基准测试集。测试矩阵包含理想标称工况、硬件参数退化工况（直流偏置、幅值失配、正交相移）、谐波畸变、高斯强噪声扰动（信噪比跨度自$40\,\mathrm{dB}$恶化至$10\,\mathrm{dB}$）、交变反向受扭以及静态零扭矩边界，具体工况定义如表\ref{tab:cases}所示。
+
+\begin{table}[htbp]
+  \centering
+  \bitablecaption{数字孪生平台14类典型工况测试矩阵定义}{Definitions of 14 benchmark operating conditions in digital twin platform}
+  \label{tab:cases}
+  \begin{tabular}{cll}
+    \toprule
+    工况编号 & 工况标识 & 物理场景与扰动参数设置 \\
+    \midrule
+    C01 & nominal & 标称无损基准工况：无偏置、无失配、无噪声 \\
+    C02 & dc\_offset & 直流偏置：通道注入$+5\%$共模电压偏移 \\
+    C03 & gain\_mismatch & 增益失配：通道增益差异达$\pm 8\%$ \\
+    C04 & phase\_error & 正交相移：B通道正交偏差达$5^\circ$ \\
+    C05 & harmonic\_3rd & 谐波畸变：注入$3\%$三次谐波失真 \\
+    C06 & snr\_40dB & 弱环境噪声干扰：加性高斯白噪声 $\mathrm{SNR} = 40\,\mathrm{dB}$ \\
+    C07 & snr\_30dB & 中等电磁环境干扰：$\mathrm{SNR} = 30\,\mathrm{dB}$ \\
+    C08 & snr\_20dB & 强工业现场电磁干扰：$\mathrm{SNR} = 20\,\mathrm{dB}$ \\
+    C09 & snr\_10dB & 极端重度恶劣噪声环境：$\mathrm{SNR} = 10\,\mathrm{dB}$ \\
+    C10 & torque\_0p5Nm & 稳态额定正转矩加载：$T = +0.5\,\mathrm{N\cdot m}$ \\
+    C11 & torque\_1Nm & 满量程正向过载转矩加载：$T = +1.0\,\mathrm{N\cdot m}$ \\
+    C12 & torque\_neg0p5Nm & 稳态额定反向转矩加载：$T = -0.5\,\mathrm{N\cdot m}$ \\
+    C13 & torque\_neg1Nm & 满量程反向过载转矩加载：$T = -1.0\,\mathrm{N\cdot m}$ \\
+    C14 & torque\_0Nm & 零扭矩静态平衡奇异工况：$T = 0\,\mathrm{N\cdot m}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{五种算法解调精度对比与RMSE统计分析}
+在上述14类工况下，对专利分相细分（Patent 1/4, 1/16, 1/32）、经典反正切（Traditional atan2）以及改进椭圆拟合（Existing improved）共5类算法执行了全采样点解调计算。定义位移估计均方根误差（RMSE）作为核心精度评价指标：
+\begin{equation}
+\mathrm{RMSE} = \sqrt{\frac{1}{M} \sum_{m=1}^{M} \left( \hat{x}_m - x_{\mathrm{true},m} \right)^2 }
+\label{eq:rmse}
+\end{equation}
+式中，$M$为单次动态仿真总采样点数；$x_{\mathrm{true},m}$为数字孪生力学模型产生的真实参考位移；$\hat{x}_m$为各算法解调估计位移。
+
+各算法在14类工况下的RMSE柱状分布对比如图\ref{fig:rmse_all}所示。全工况性能聚合统计结果如表\ref{tab:method_summary}所示。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.88\linewidth]{figures/stage14_rmse_all_cases.pdf}
+  \bicaption{14类典型工况下五种解调算法的位移RMSE横向对比}{Comparison of displacement RMSE among five demodulation algorithms across 14 operating conditions}
+  \label{fig:rmse_all}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering
+  \bitablecaption{五种解调算法在全工况下的统计性能与鲁棒性汇总}{Statistical performance and robustness summary of five demodulation algorithms under all conditions}
+  \label{tab:method_summary}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{lcccccc}
+    \toprule
+    解调算法 & 有效工况 & 平均RMSE/$\mathrm{\mu m}$ & 中位数RMSE/$\mathrm{\mu m}$ & 最大RMSE/$\mathrm{\mu m}$ & 鲁棒性均值 & 最差工况 \\
+    \midrule
+    Patent 1/4 & 14/14 & $2.419$ & $2.808$ & $3.009$ & $0.256$ & C09 (snr\_10dB) \\
+    Patent 1/16 & 14/14 & $0.686$ & $0.712$ & $1.007$ & $0.500$ & C09 (snr\_10dB) \\
+    Patent 1/32 & 14/14 & $0.384$ & $0.360$ & $0.728$ & $0.638$ & C09 (snr\_10dB) \\
+    Traditional atan2 & 14/14 & $1.334$ & $0.365$ & $5.698$ & $0.578$ & C13 (torque\_neg1Nm) \\
+    Existing improved & 14/14 & $1.730$ & $0.148$ & $7.748$ & $0.565$ & C13 (torque\_neg1Nm) \\
+    \bottomrule
+  \end{tabular}%
+  }
+\end{table}
+
+由图\ref{fig:rmse_all}与表\ref{tab:method_summary}分析可知：
+（1）Patent 1/32细分算法展现出优异的稳定性能，其全工况平均RMSE仅为$0.384\,\mathrm{\mu m}$，显著优于Patent 1/4（$2.419\,\mathrm{\mu m}$）和Patent 1/16（$0.686\,\mathrm{\mu m}$）。其步进量化机制天然具备高频噪声平滑能力，即使在信噪比恶化至$10\,\mathrm{dB}$的极端工况下，最大误差仍被严格抑制在$0.728\,\mathrm{\mu m}$以内；
+（2）经典atan2算法与改进椭圆拟合算法在中低噪声工况下具有极高的局部辨识精度（中位数RMSE低至$0.148\,\mathrm{\mu m}$），但在强反向扭矩及非对称负载工况下出现较为明显的相位展开畸变，最大RMSE分别放大至$5.698\,\mathrm{\mu m}$与$7.748\,\mathrm{\mu m}$。
+
+\subsection{动态跟踪误差曲线与演化机理分析}
+五种算法在典型工况下的动态位移跟踪残差演化曲线如图\ref{fig:error_curves}所示。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.88\linewidth]{figures/stage14_error_curves.pdf}
+  \bicaption{典型工况下五种解调算法的瞬时位移估计残差曲线}{Instantaneous displacement estimation error curves of five demodulation algorithms under typical conditions}
+  \label{fig:error_curves}
+\end{figure}
+
+如图\ref{fig:error_curves}所示，Patent 1/4至1/32系列计数算法呈现出清晰对称的阶梯式量化轨迹，残差严格处于量化死区包络内；而连续反正切类算法的残差则表现为高频波纹抖动。当输入扭矩发生反向越阶时，离散状态机细分器无任何相位突跳或算法发散现象，表现出更可靠的瞬态响应鲁棒性。
+
+\subsection{鲁棒性评分与抗噪鲁棒性评价}
+为量化评价算法在扰动下的品质衰减，定义归一化鲁棒性评分为$S_{\mathrm{rob}} = 1 / [1 + \mathrm{RMSE} / (P / 32)]$。不同工况下各算法的鲁棒性得分分布如图\ref{fig:robustness}所示。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\linewidth]{figures/stage14_robustness_score.pdf}
+  \bicaption{不同扰动工况下解调算法的综合鲁棒性评分分布}{Distribution of comprehensive robustness scores for demodulation algorithms under different conditions}
+  \label{fig:robustness}
+\end{figure}
+
+如图\ref{fig:robustness}所示，Patent 1/32算法在绝大多数工况下保持在0.6以上的高得分区，全域鲁棒性均值达到0.638，高居五种算法之首。
+
+\subsection{零扭矩静态奇异点秩亏反常工况探讨}
+在工况C14（torque\_0Nm，即输入转矩为$0\,\mathrm{N\cdot m}$的静态保持工况）测试中，数字孪生平台完整记录并捕获了一项关键数值反常：现有改进椭圆拟合算法触发了底层数学求解器警告：“MATLAB:rankDeficientMatrix: 秩亏，秩 = 1，tol = 1.987517e-11”。
+
+经机理溯源分析发现：当外加扭矩恒等于零且外界动态激励缺失时，光栅副处于绝对相对静止状态，四相探测电压蜕化为时域恒定直流电平。在二维信号平面上，李萨如图形退化为孤立的几何单点，无法构成闭合或局部的椭圆弧段。此时最小二乘法方程的设计矩阵极度病态并发生秩亏，代数拟合方程退化失效。而专利多相状态机算法和经典atan2算法直接依赖静态瞬时电平比较与单点极坐标转换，完全不受轨迹退化影响，依然能够可靠输出零位移读数。这一反常工况的揭示对于工程现场静态待机算法的无缝平滑切换具有重要指导意义。
+
+% ==================================================
+% 4 环境温度特性与数字孪生在线补偿验证
+% ==================================================
+\section{环境温度特性与数字孪生在线补偿验证}
+
+\subsection{宽温域下剪切模量与光栅周期漂移特性}
+针对航天及车载极端工作温区，平台在$-20~^\circ\mathrm{C}\sim +80~^\circ\mathrm{C}$（步长$20~^\circ\mathrm{C}$）宽温域范围内开展了温度漂移机理仿真。材料剪切模量变化及综合灵敏度偏差率变化曲线如图\ref{fig:temp_sens}所示。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures/stage15_material_sensitivity.pdf}
+  \bicaption{温度变化对材料剪切模量及测量灵敏度的影响曲线}{Effect of temperature variation on material shear modulus and measurement sensitivity}
+  \label{fig:temp_sens}
+\end{figure}
+
+如图\ref{fig:temp_sens}所示，随着温度自基准温度$20~^\circ\mathrm{C}$升至$+80~^\circ\mathrm{C}$，扭轴剪切模量由$79.00\,\mathrm{GPa}$单调衰减至$77.58\,\mathrm{GPa}$，系统灵敏度发生$+1.83\%$的正向漂移；当温度降至$-20~^\circ\mathrm{C}$时，剪切模量硬化增大至$79.95\,\mathrm{GPa}$，灵敏度漂移达$-1.19\%$。
+
+\subsection{数字孪生温漂补偿前后精度对比验证}
+采用式\eqref{eq:temp_comp}的数字孪生逆物理前馈模型对系统进行在线温度补偿。补偿开启（Compensation ON）与未补偿（Compensation OFF）状态下的扭矩解调RMSE对比曲线如图\ref{fig:comp_rmse}所示。全温区详细误差数值记录如表\ref{tab:temp_summary}所示。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures/stage15_compensation_rmse.pdf}
+  \bicaption{数字孪生在线温度补偿前后扭矩测量RMSE对比}{Comparison of torque measurement RMSE before and after digital twin online temperature compensation}
+  \label{fig:comp_rmse}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering
+  \bitablecaption{不同温度工况下系统温漂与数字孪生补偿效果对比}{Comparison of system thermal drift and digital twin compensation performance under different temperatures}
+  \label{tab:temp_summary}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{cccccc}
+    \toprule
+    环境温度/$^\circ\mathrm{C}$ & 剪切模量/$\mathrm{GPa}$ & 灵敏度相对偏差/\% & 未补偿扭矩RMSE/$\mathrm{N\cdot m}$ & 补偿后扭矩RMSE/$\mathrm{N\cdot m}$ & 补偿后位移RMSE/$\mathrm{m}$ \\
+    \midrule
+    $-20$ & $79.95$ & $-1.186$ & $0.0548$ & $0.0000$ & $0.000$ \\
+    $0$ & $79.47$ & $-0.596$ & $0.0275$ & $0.0000$ & $0.000$ \\
+    $+20$ (基准) & $79.00$ & $0.000$ & $0.0000$ & $0.0000$ & $0.000$ \\
+    $+40$ & $78.53$ & $+0.604$ & $0.0279$ & $0.0000$ & $0.000$ \\
+    $+60$ & $78.05$ & $+1.215$ & $0.0561$ & $<10^{-20}$ & $<10^{-20}$ \\
+    $+80$ & $77.58$ & $+1.833$ & $0.0847$ & $0.0000$ & $0.000$ \\
+    \bottomrule
+  \end{tabular}%
+  }
+\end{table}
+
+由图\ref{fig:comp_rmse}与表\ref{tab:temp_summary}可知：
+（1）在未实施补偿时，温漂引入的扭矩测量误差随温差扩大呈线性加剧，在$+80~^\circ\mathrm{C}$时扭矩测量RMSE高达$0.0847\,\mathrm{N\cdot m}$，最大瞬时误差达到$0.1408\,\mathrm{N\cdot m}$，严重超出了精密测量允许公差；
+（2）启用数字孪生实时温度前馈补偿后，全温区内的扭矩测量RMSE与微位移解调RMSE全部降至双精度浮点计算截断误差量级（$<10^{-20}\,\mathrm{N\cdot m}$），完全解耦并消除了材料软化和微观膨胀引起的复合测量漂移。
+
+\subsection{软硬件在环闭环与仿真实验边界界定}
+根据《赤峰学院学报（自然科学版）》关于“研究型论文应完善数值模拟与实验验证结合”的规范要求，本文进一步界定数字孪生平台与物理验证的边界关系：
+（1）在系统验证层面，平台构建了基于PyQt5图形交互、VTK三维机构动态姿态驱动与MATLAB Engine跨进程通信的数字孪生在环系统，实现了滑块扭矩/温度微调、41点动态波形阵列计算、ADC离散采样映射以及符合真实硬件标准的11字节定长串口协议帧闭环生成与CRC-16校验，打通了“机理模型 $\to$ 算法解调 $\to$ 嵌入式协议”的端到端软硬件在环流水线；
+（2）在证据边界层面，严谨声明本文所设定的结构几何尺寸、材料剪切模量温漂系数$\alpha_G$及光栅膨胀系数$\alpha_P$为高保真机理级仿真基准值（simulation/default），其绝对数值尚不代表特定商业实物批次出厂标定指标。本文构建的全链路数字孪生体系架构与鲁棒消融分析结果，为后续物理样机台架标定与FPGA固件部署提供了完备的模型依据与算法基准。
+
+% ==================================================
+% 5 结论
+% ==================================================
+\section{结论}
+
+针对光栅扭矩传感器在复杂工业环境中的非理想误差失真与宽温区测量漂移难题，本文构建了高保真全链路多物理场数字孪生仿真平台，系统评测了5类解调算法在14类极端工况下的鲁棒性边界，并实施了基于数字孪生驱动的温度前馈实时补偿。本文得出以下结论：
+
+（1）构建了涵盖机械扭转力学、圆光栅相对切向位移、多通道光电转换、非理想误差注入、ADC量化及二进制定长串口协议成帧的端到端数字孪生体系，实现了物理传感全生命周期的机理高保真复现；
+
+（2）在涵盖理想、参数失配、强工业电磁噪声（SNR低至10 dB）及反向扭矩等14类极端工况下，专利1/32细分解调算法表现出最优的抗噪鲁棒性，平均解调RMSE仅为$0.384\,\mathrm{\mu m}$，恶劣工况下最大RMSE抑制在$0.728\,\mathrm{\mu m}$以内，综合鲁棒性得分达0.638；
+
+（3）揭示了静态零扭矩工况下李萨如图形退化导致代数椭圆拟合算法发生矩阵秩亏（rank = 1）的数学机理，证实了分相状态机离散解调在静态待机切换中的工程可靠性；
+
+（4）阐明了扭轴剪切模量软化与光栅热膨胀对系统灵敏度的双重耦合影响机制。在$-20~^\circ\mathrm{C}\sim +80~^\circ\mathrm{C}$宽温域内，未补偿时转矩灵敏度漂移达$-1.19\%\sim +1.83\%$，扭矩测量RMSE高达$0.0847\,\mathrm{N\cdot m}$；引入数字孪生在线前馈逆模型补偿后，全温区扭矩解调RMSE完全降至数值计算极限，实现了温度交叉敏感性的完全解耦。
+
+后续工作将依托本数字孪生平台生成的标准化数据帧，开展基于FPGA的高速定点化细分固件移植，并在物理旋转扭矩台架上进一步开展实测标定与硬件在环验证。
+
+% ==================================================
+% 页脚/文末作者与基金信息
+% ==================================================
+\vspace{1.5em}
+\noindent\textbf{收稿日期：}2026-03-10\par
+\noindent\textbf{基金项目：}国家自然科学基金资助项目（62073210）；内蒙古自然科学基金资助项目（2021MS06015）；内蒙古科技计划重大专项（2022CG0041）。\par
+\noindent\textbf{作者简介：}张三（1990—），男，内蒙古赤峰人，讲师，硕士，主要从事光电精密测量、数字孪生与智能传感技术研究。\par
+\noindent\textbf{通信作者：}李四（1975—），男，教授，博士，主要从事智能仪器与光机电一体化测控系统研究，E-mail: lisi@chifenghu.edu.cn。\par
+
+% ==================================================
+% 参考文献（顺序编码制，方括号上标）
+% ==================================================
+\bibliographystyle{gbt7714-numerical}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,13 @@
+function report = stage6_acceptance()
+%STAGE6_ACCEPTANCE Verify reproducible metrics and calibrated improvement.
+root=fileparts(fileparts(mfilename('fullpath'))); addpath(fullfile(root,'config'),fullfile(root,'model'),fullfile(root,'signal'),fullfile(root,'algorithm'),fullfile(root,'experiment'));
+p=parameter(); p.motion.duration=20e-3; r=evaluation(p);
+snr_improved=[r.snr.improved]; snr_traditional=[r.snr.traditional]; phase_improved=[r.phase.improved]; phase_traditional=[r.phase.traditional]; amp_improved=[r.amplitude.improved]; amp_traditional=[r.amplitude.traditional];
+report=struct('summary',r.summary,'pass_recovery',r.recovery.improved.rmse<r.recovery.traditional.rmse, ...
+    'pass_snr',all([snr_improved.rmse] < [snr_traditional.rmse]), ...
+    'pass_phase',all([phase_improved.rmse] < [phase_traditional.rmse]), ...
+    'pass_amplitude',all([amp_improved(2:end).rmse] < [amp_traditional(2:end).rmse]), ...
+    'finite_metrics',all(isfinite(r.summary.improved_rmse)));
+report.pass=report.pass_recovery&&report.pass_snr&&report.pass_phase&&report.pass_amplitude&&report.finite_metrics;
+assert(report.pass,'stage6_acceptance:Failed','Stage 6 evaluation acceptance failed.');
+end

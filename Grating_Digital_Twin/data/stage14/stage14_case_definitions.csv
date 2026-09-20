@@ -1,0 +1,15 @@
+name,disturbance,torque_peak,amplitude_1,amplitude_2,amplitude_3,amplitude_4,phase_error_1,phase_error_2,phase_error_3,phase_error_4,offset_1,offset_2,offset_3,offset_4,snr_db,seed
+ideal,ideal,8,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,Inf,20260916
+amplitude_mismatch,amplitude mismatch,8,0.52,1.08,0.64,0.96,0,0,0,0,0,0,0,0,Inf,20260917
+phase_error,phase error,8,0.8,0.8,0.8,0.8,0.15,-0.12,0.08,-0.1,0,0,0,0,Inf,20260918
+dc_offset,DC offset,8,0.8,0.8,0.8,0.8,0,0,0,0,0.15,-0.1,0.08,-0.05,Inf,20260919
+snr_30dB,Gaussian noise,8,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,30,20260920
+snr_20dB,Gaussian noise,8,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,20,20260921
+snr_10dB,Gaussian noise,8,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,10,20260922
+torque_neg8Nm,torque sweep,-8,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,Inf,20260923
+torque_neg4Nm,torque sweep,-4,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,Inf,20260924
+torque_neg1Nm,torque sweep,-1,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,Inf,20260925
+torque_0Nm,torque sweep,0,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,Inf,20260926
+torque_pos1Nm,torque sweep,1,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,Inf,20260927
+torque_pos4Nm,torque sweep,4,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,Inf,20260928
+torque_pos8Nm,torque sweep,8,0.8,0.8,0.8,0.8,0,0,0,0,0,0,0,0,Inf,20260929

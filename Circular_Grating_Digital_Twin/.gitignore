@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+*.stl
+*.ply
+*.obj
+*.png
+*.mp4

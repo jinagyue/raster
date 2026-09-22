@@ -12,6 +12,14 @@
 8. 明确温度系数为 `simulation/default`、未验证；补偿后接近零是同一模型正逆运算的一致性结果。
 9. 新增 `PAPER_AUDIT.md`，记录问题等级、数据边界、可保留数值和验收标准。
 
+## 图件重构（2026-09-22）
+
+- 用 `figures_9_20260922/fig01` 替换正文架构 TikZ 图，并新增结构图、信号链图、算法流程图和协议接口图（fig02--fig05）。
+- 用 `fig06_rmse_heatmap_python.png` 和 `fig07_method_summary_python.png` 替换原 Stage 14 PDF 图件；二者继续使用既有 Stage 14 CSV 数据。
+- 用 `fig08_temperature_compensation_python.png` 替换温度结果图，并加入 `fig09_software_gui_real_runtime.png` 作为软件运行态界面示例。
+- 正文已在每个图首次出现处使用 `\\ref` 引用；图注说明示意图、协议预览和软件界面不等同于实物测量证据。
+- 新版 XeLaTeX PDF 为 14 页，图文件均来自 `figures_9_20260922`，无旧 Stage 14/15 PDF 图引用。
+
 ## 未擅自修改
 
 - 未修改冻结的旧版目录 `paper_grating_torque_twin`。

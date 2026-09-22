@@ -157,26 +157,12 @@ ZHANG San$^{1}$, LI Si$^{2}$, WANG Wu$^{2}$\par
 
 \begin{figure}[htbp]
   \centering
-  \begin{tikzpicture}[node distance=1.0cm and 0.8cm, auto, >=Stealth,
-    block/.style={rectangle, draw=black, thick, fill=white, text width=2.4cm, text centered, minimum height=1.1cm, font=\small},
-    line/.style={draw=black, thick, -{Stealth[length=2.5mm]}}]
-
-    \node [block] (input) {输入激励\\扭矩 $T$ / 温度 $T_{\mathrm{e}}$};
-    \node [block, right=of input] (mech) {机械扭转层\\扭转角 $\theta$\\相对位移 $x_{\mathrm{rel}}$};
-    \node [block, right=of mech] (opt) {光学调制层\\微位移透射\\光学相位 $\phi_{\mathrm{opt}}$};
-    \node [block, below=of opt] (photo) {光电转换层\\光敏探测阵列\\跨阻调理电压};
-    \node [block, left=of photo] (error) {非理想误差层\\偏置/失配/相移\\谐波与高斯噪声};
-    \node [block, left=of error] (adc) {数字采样与通信\\ADC模数转换\\串口定长协议帧};
-
-    \path [line] (input) -- (mech);
-    \path [line] (mech) -- (opt);
-    \path [line] (opt) -- (photo);
-    \path [line] (photo) -- (error);
-    \path [line] (error) -- (adc);
-  \end{tikzpicture}
-  \bicaption{光栅扭矩传感器数字孪生全链路架构}{Full-pipeline architecture of digital twin for optical grating torque sensor}
+  \includegraphics[width=0.98\linewidth]{figures_9_20260922/fig01_system_architecture_ai.png}
+  \bicaption{光栅扭矩测量数字仿真平台总体架构}{Overall architecture of the optical grating torque measurement simulation platform}
   \label{fig:arch}
 \end{figure}
+
+图\ref{fig:arch}给出了机械、光学、信号、算法和通信模块之间的接口关系；其中示意图用于说明模型分层，不作为实物结构或通信实测证据。
 
 \subsection{机械扭转力学与光栅位移几何映射}
 当扭轴两端承受外加转矩时，弹性受力段产生扭转角剪切应变。根据圆截面轴扭转力学理论，扭转角与施加外扭矩呈线性正比关系，如式\eqref{eq:theta}所示：
@@ -192,6 +178,15 @@ x_{\mathrm{rel}} = x_{\mathrm{bias}} + r_{\mathrm{eff}} \theta
 \label{eq:displacement}
 \end{equation}
 式中，$x_{\mathrm{rel}}$为光栅刻线间的相对切向线位移，单位为$\mathrm{m}$；$r_{\mathrm{eff}}$为光电读数头所在的有效旋转测量半径，标称值为$0.007\,\mathrm{m}$；$x_{\mathrm{bias}}$为机械装配初始静态位移偏置量，单位为$\mathrm{m}$。
+
+光栅副的结构示意如图\ref{fig:structure}所示。图中标注用于对应模型中的扭轴、主光栅、指示光栅和五路检测位置，具体尺寸仍以表\ref{tab:param}的仿真参数为准。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures_9_20260922/fig02_mechanical_optical_structure_ai.png}
+  \bicaption{光栅扭矩测量机械—光学结构示意}{Schematic of the mechanical--optical structure for grating torque measurement}
+  \label{fig:structure}
+\end{figure}
 
 \subsection{光学调制与多通道光电接收模型}
 光栅刻线副周期设为$P$，取标称基准值$P=20\,\mathrm{\mu m}$。相对切向微位移$x_{\mathrm{rel}}$通过莫尔条纹光强调制转换为空间光学相位，如式\eqref{eq:optical_phase}所示：
@@ -228,6 +223,15 @@ u_{\mathrm{D}} &= U_0 + U_{\mathrm{m}} \cos\left(\phi_{\mathrm{opt}} + \frac{3\p
 \end{equation}
 式中，$u_{\mathrm{A}}$、$u_{\mathrm{B}}$、$u_{\mathrm{C}}$、$u_{\mathrm{D}}$分别为四路光电转换通道输出电压，单位为$\mathrm{V}$；$U_0$为直流共模电压偏置，单位为$\mathrm{V}$；$U_{\mathrm{m}}$为正弦调制交流电压幅值，单位为$\mathrm{V}$。
 
+图\ref{fig:signal_chain}进一步概括了从扭矩输入到ADC采样的信号链及误差注入位置。该图是模型流程示意，Stage 14的算法比较仍直接使用模拟四通道信号。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.98\linewidth]{figures_9_20260922/fig03_signal_error_model_ai.png}
+  \bicaption{四相信号生成与误差注入链路}{Four-phase signal generation and error-injection chain}
+  \label{fig:signal_chain}
+\end{figure}
+
 \subsection{非理想误差注入与ADC量化模型}
 在实际硬件系统中，光电探测器响应度不一致、安装偏差与电路漂移会使输出偏离理想模型。源码中的误差函数以通道幅值、相位误差、附加偏置和高斯噪声为主，并保留可选的公共高频干扰接口，如式\eqref{eq:error_model}所示：
 \begin{equation}
@@ -245,6 +249,15 @@ D_i = \mathrm{round}\left( \frac{\mathrm{clip}(u_i^*, V_{\mathrm{min}}, V_{\math
 
 \subsection{通信协议成帧与数字孪生基准参数}
 为定义采样数据的输出接口，源码提供四通道定长二进制帧生成器。配置波特率为$115200\,\mathrm{bps}$时，每帧为11字节：1字节帧头（\texttt{0xAA}）、A--D四路各2字节ADC码以及2字节CRC-16/CCITT-FALSE。该模块可写入仿真文件或调用MATLAB串口接口；本文未将帧生成结果解释为已连接实物的实时通信。
+
+图\ref{fig:protocol}展示了从估计结果、评价指标到协议帧和CRC校验的接口关系。图中“协议预览”不等于物理串口实测通信。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.98\linewidth]{figures_9_20260922/fig05_protocol_evidence_ai.png}
+  \bicaption{结果评价与11字节协议帧接口示意}{Interface between result evaluation and the 11-byte protocol frame}
+  \label{fig:protocol}
+\end{figure}
 
 数字孪生仿真平台的主要物理参数、光学几何尺寸与电气配置如表\ref{tab:param}所示。
 
@@ -284,6 +297,15 @@ q=\mathrm{MAIN}-\mathrm{PHASE}_{180},\qquad v=\mathrm{PHASE}_{270}-\mathrm{PHASE
 \label{eq:patent_phase}
 \end{equation}
 对$\psi/(2\pi)$分别取有符号的完成区间数，得到1/4、1/16和1/32三种计数输出；三十二细分的名义步长为$P/32=0.625\,\mathrm{\mu m}$。因此该基准是“相位展开+完成区间计数”的离线参考实现，不能描述为未给出源码的硬件状态机。
+
+图\ref{fig:algorithm_flow}给出了五种算法从输入信号、异常标记到位移和扭矩输出的比较流程。图中“12 bit ADC”表示可选接口，具体性能统计以模拟通道为输入。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.98\linewidth]{figures_9_20260922/fig04_algorithm_flow_ai.png}
+  \bicaption{多算法解调与扭矩换算流程}{Multi-algorithm demodulation and torque-conversion flow}
+  \label{fig:algorithm_flow}
+\end{figure}
 
 \subsection{经典反正切与协方差白化解调算法}
 差分反正切基准对四路信号实施互补差分：
@@ -372,12 +394,12 @@ P(T_{\mathrm{e}}) = P_0 \left[ 1 + \alpha_P (T_{\mathrm{e}} - T_0) \right]
 \end{equation}
 式中，$N_s$为单次仿真的样本数，$x_{\mathrm{true},m}$为力学模型参考位移，$\hat{x}_m$为算法估计位移。鲁棒性评分$S_{\mathrm{rob}}=1/[1+\mathrm{RMSE}/(P/32)]$仅是以1/32名义步长归一化的描述性指标。
 
-各算法在14类工况下的RMSE柱状分布对比如图\ref{fig:rmse_all}所示。全工况性能聚合统计结果如表\ref{tab:method_summary}所示。
+各算法在14类工况下的RMSE热图如图\ref{fig:rmse_all}所示；该图直接对应Stage 14的工况—算法矩阵。全工况性能聚合统计结果如表\ref{tab:method_summary}和图\ref{fig:method_summary}所示。
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.88\linewidth]{figures/stage14_rmse_all_cases.pdf}
-  \bicaption{14类典型工况下五种解调算法的位移RMSE横向对比}{Comparison of displacement RMSE among five demodulation algorithms across 14 operating conditions}
+  \includegraphics[width=0.98\linewidth]{figures_9_20260922/fig06_rmse_heatmap_python.png}
+  \bicaption{14类工况下五种解调算法的位移RMSE热图}{Displacement RMSE heatmap for five demodulation algorithms across 14 cases}
   \label{fig:rmse_all}
 \end{figure}
 
@@ -400,33 +422,22 @@ P(T_{\mathrm{e}}) = P_0 \left[ 1 + \alpha_P (T_{\mathrm{e}} - T_0) \right]
   }
 \end{table}
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.98\linewidth]{figures_9_20260922/fig07_method_summary_python.png}
+  \bicaption{五种解调算法的误差统计与归一化鲁棒性}{Error statistics and normalized robustness of five demodulation algorithms}
+  \label{fig:method_summary}
+\end{figure}
+
 由图\ref{fig:rmse_all}与表\ref{tab:method_summary}分析可知：
 （1）Patent 1/32细分算法展现出优异的稳定性能，其全工况平均RMSE仅为$0.384\,\mathrm{\mu m}$，显著优于Patent 1/4（$2.419\,\mathrm{\mu m}$）和Patent 1/16（$0.686\,\mathrm{\mu m}$）。其步进量化机制天然具备高频噪声平滑能力，即使在信噪比恶化至$10\,\mathrm{dB}$的极端工况下，最大误差仍被严格抑制在$0.728\,\mathrm{\mu m}$以内；
 （2）经典atan2算法与改进椭圆拟合算法在中低噪声工况下具有极高的局部辨识精度（中位数RMSE低至$0.148\,\mathrm{\mu m}$），但在强反向扭矩及非对称负载工况下出现较为明显的相位展开畸变，最大RMSE分别放大至$5.698\,\mathrm{\mu m}$与$7.748\,\mathrm{\mu m}$。
 
 \subsection{动态跟踪误差曲线与演化机理分析}
-五种算法在典型工况下的动态位移跟踪残差演化曲线如图\ref{fig:error_curves}所示。
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.88\linewidth]{figures/stage14_error_curves.pdf}
-  \bicaption{典型工况下五种解调算法的瞬时位移估计残差曲线}{Instantaneous displacement estimation error curves of five demodulation algorithms under typical conditions}
-  \label{fig:error_curves}
-\end{figure}
-
-如图\ref{fig:error_curves}所示，Patent 1/4至1/32系列计数输出呈阶梯状，残差反映了完成区间计数的量化特性；连续反正切类算法则表现为连续相位估计误差。对于当前脚本中的反向扭矩扫掠，这些曲线描述的是该采样窗口和unwrap实现下的结果，不外推为所有动态反向工况的普适结论。
+图\ref{fig:rmse_all}和图\ref{fig:method_summary}分别给出逐工况RMSE分布与聚合统计；两图替换原有Stage 14 PDF图件，并保留同一CSV数据来源。对于反向扭矩扫掠，结果只描述当前采样窗口和unwrap实现，不外推为所有动态反向工况的普适结论。
 
 \subsection{鲁棒性评分与抗噪鲁棒性评价}
-为量化评价算法在扰动下的品质衰减，定义归一化鲁棒性评分为$S_{\mathrm{rob}} = 1 / [1 + \mathrm{RMSE} / (P / 32)]$。不同工况下各算法的鲁棒性得分分布如图\ref{fig:robustness}所示。
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.85\linewidth]{figures/stage14_robustness_score.pdf}
-  \bicaption{不同扰动工况下解调算法的综合鲁棒性评分分布}{Distribution of comprehensive robustness scores for demodulation algorithms under different conditions}
-  \label{fig:robustness}
-\end{figure}
-
-如图\ref{fig:robustness}所示，Patent 1/32算法在当前14个离线工况中的归一化评分均值为0.638。该分数依赖预先选定的$P/32$归一化尺度，仅用于本组算法相对比较。
+为量化评价算法在扰动下的品质衰减，定义归一化鲁棒性评分为$S_{\mathrm{rob}} = 1 / [1 + \mathrm{RMSE} / (P / 32)]$。图\ref{fig:method_summary}中的右侧面板给出了各算法的聚合评分。Patent 1/32在当前14个离线工况中的均值为0.638；该分数依赖预先选定的$P/32$归一化尺度，仅用于本组算法相对比较。
 
 \subsection{零扭矩静态奇异点秩亏反常工况探讨}
 在零扭矩恒定输入窗口测试中，现有白化算法可能触发底层线性代数的秩亏警告。某次运行记录为“MATLAB:rankDeficientMatrix: 秩亏，秩 = 1，tol = 1.987517e-11”；该数值依赖样本窗口和实现版本。
@@ -439,25 +450,25 @@ P(T_{\mathrm{e}}) = P_0 \left[ 1 + \alpha_P (T_{\mathrm{e}} - T_0) \right]
 \section{环境温度特性与模型逆变换分析}
 
 \subsection{宽温域下剪切模量与光栅周期漂移特性}
-针对航天及车载极端工作温区，平台在$-20~^\circ\mathrm{C}\sim +80~^\circ\mathrm{C}$（步长$20~^\circ\mathrm{C}$）宽温域范围内开展了温度漂移机理仿真。材料剪切模量变化及综合灵敏度偏差率变化曲线如图\ref{fig:temp_sens}所示。
+针对$-20~^\circ\mathrm{C}\sim +80~^\circ\mathrm{C}$（步长$20~^\circ\mathrm{C}$）范围，平台开展温度参数敏感性仿真。灵敏度变化和补偿前后扭矩误差如图\ref{fig:temp_sens}所示。
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.82\linewidth]{figures/stage15_material_sensitivity.pdf}
-  \bicaption{温度变化对材料剪切模量及测量灵敏度的影响曲线}{Effect of temperature variation on material shear modulus and measurement sensitivity}
+  \includegraphics[width=0.98\linewidth]{figures_9_20260922/fig08_temperature_compensation_python.png}
+  \bicaption{温度引起的灵敏度变化及模型逆变换误差}{Temperature-induced sensitivity variation and model-inversion error}
   \label{fig:temp_sens}
 \end{figure}
 
-如图\ref{fig:temp_sens}所示，随着温度自基准温度$20~^\circ\mathrm{C}$升至$+80~^\circ\mathrm{C}$，扭轴剪切模量由$79.00\,\mathrm{GPa}$单调衰减至$77.58\,\mathrm{GPa}$，系统灵敏度发生$+1.83\%$的正向漂移；当温度降至$-20~^\circ\mathrm{C}$时，剪切模量硬化增大至$79.95\,\mathrm{GPa}$，灵敏度漂移达$-1.19\%$。
+如图\ref{fig:temp_sens}所示，温度从$20~^\circ\mathrm{C}$升至$+80~^\circ\mathrm{C}$时，完整相位链的灵敏度偏差达到$+1.83\%$；降至$-20~^\circ\mathrm{C}$时为$-1.19\%$。右侧面板显示同一模型逆变换后的残差为数值误差量级，不能解释为实物温漂测量结果。
 
 \subsection{温度参数逆变换前后精度对比}
-采用式\eqref{eq:temp_comp}的同模型逆变换进行离线补偿。补偿开启（Compensation ON）与未补偿（Compensation OFF）状态下的扭矩RMSE对比曲线如图\ref{fig:comp_rmse}所示。全温区详细误差数值记录如表\ref{tab:temp_summary}所示。
+采用式\eqref{eq:temp_comp}的同模型逆变换进行离线补偿。数字孪生软件的运行态界面示例如图\ref{fig:software_gui}所示；全温区详细误差数值记录如表\ref{tab:temp_summary}所示，误差曲线数据已汇总在图\ref{fig:temp_sens}的右侧面板。
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.82\linewidth]{figures/stage15_compensation_rmse.pdf}
-\bicaption{温度模型逆变换前后扭矩RMSE对比}{Torque RMSE before and after inversion of the temperature model}
-  \label{fig:comp_rmse}
+  \includegraphics[width=0.98\linewidth]{figures_9_20260922/fig09_software_gui_real_runtime.png}
+\bicaption{数字孪生软件运行态界面示例}{Runtime interface example of the digital-twin software}
+  \label{fig:software_gui}
 \end{figure}
 
 \begin{table}[htbp]
@@ -480,7 +491,7 @@ P(T_{\mathrm{e}}) = P_0 \left[ 1 + \alpha_P (T_{\mathrm{e}} - T_0) \right]
   }
 \end{table}
 
-由图\ref{fig:comp_rmse}与表\ref{tab:temp_summary}可知：
+由图\ref{fig:temp_sens}与表\ref{tab:temp_summary}可知：
 （1）在未实施补偿时，温漂引入的扭矩测量误差随温差扩大呈线性加剧，在$+80~^\circ\mathrm{C}$时扭矩测量RMSE高达$0.0847\,\mathrm{N\cdot m}$，最大瞬时误差达到$0.1408\,\mathrm{N\cdot m}$，严重超出了精密测量允许公差；
 （2）采用同一参数模型进行逆变换后，表中补偿误差降至双精度浮点计算的舍入误差量级（部分点记录为$<10^{-20}\,\mathrm{N\cdot m}$）。这验证的是模型内部的可逆性；由于温度系数标注为未验证，不能据此声称实物温漂已被完全消除。
 

@@ -19,6 +19,7 @@
 - 用 `fig08_temperature_compensation_python.png` 替换温度结果图，并加入 `fig09_software_gui_real_runtime.png` 作为软件运行态界面示例。
 - 正文已在每个图首次出现处使用 `\\ref` 引用；图注说明示意图、协议预览和软件界面不等同于实物测量证据。
 - 新版 XeLaTeX PDF 为 14 页，图文件均来自 `figures_9_20260922`，无旧 Stage 14/15 PDF 图引用。
+- 图9已替换为用户提供的 `fig09_software_gui_user_runtime.png`；新版PDF第12页已完成图9视觉检查。
 
 ## 未擅自修改
 

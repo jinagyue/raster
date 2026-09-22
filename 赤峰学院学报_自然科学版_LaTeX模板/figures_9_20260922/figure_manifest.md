@@ -13,5 +13,6 @@
 | 7 | `fig07_method_summary_python.png` | 由 `stage14_method_summary.csv` 重新运行Python生成 |
 | 8 | `fig08_temperature_compensation_python.png` | 由 `stage15_temperature_summary.csv` 重新运行Python生成 |
 | 9 | `fig09_software_gui_real_edit.png` | 本机GPT-Image2缓存中的真实软件截图编辑版本 |
+| 9a | `fig09_software_gui_user_runtime.png` | 用户提供的运行态界面截图，当前论文图9使用 |
 
 量化图6–8没有使用AI重绘或修改数据。原始CSV保持不变，重绘脚本位于 `figure_redraw_20260922/regenerate_data_figures.py`。
